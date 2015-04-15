@@ -8,7 +8,7 @@ import (
 )
 
 type Mpo struct {
-	Images []*image.Image
+	Images []image.Image
 }
 
 func init() {
@@ -69,7 +69,7 @@ func Decode(filename string) (*Mpo, error) {
 	}
 
 	m := &Mpo{
-		Images: make([]*image.Image, 0),
+		Images: make([]image.Image, 0),
 	}
 
 	for _, s := range sectReaders {
@@ -78,7 +78,7 @@ func Decode(filename string) (*Mpo, error) {
 			return nil, err
 		}
 
-		m.Images = append(m.Images, &img)
+		m.Images = append(m.Images, img)
 	}
 
 	return m, nil
