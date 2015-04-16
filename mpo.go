@@ -7,8 +7,9 @@ import (
 	"os"
 )
 
-type Mpo struct {
-	Images []image.Image
+// GIF represents the likely multiple images stored in a GIF file.
+type MPO struct {
+	Image []image.Image
 }
 
 const (
@@ -17,7 +18,7 @@ const (
 	mpojpgEOI = 0xD9
 )
 
-func Decode(filename string) (*Mpo, error) {
+func DecodeAll(filename string) (*MPO, error) {
 	r, err := os.Open(filename)
 
 	if err != nil {
@@ -64,8 +65,8 @@ func Decode(filename string) (*Mpo, error) {
 		}
 	}
 
-	m := &Mpo{
-		Images: make([]image.Image, 0),
+	m := &MPO{
+		Image: make([]image.Image, 0),
 	}
 
 	for _, s := range sectReaders {
@@ -74,9 +75,8 @@ func Decode(filename string) (*Mpo, error) {
 			return nil, err
 		}
 
-		m.Images = append(m.Images, img)
+		m.Image = append(m.Image, img)
 	}
 
 	return m, nil
-
 }

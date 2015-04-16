@@ -16,13 +16,13 @@ const (
 	GreenRed
 )
 
-func (m *Mpo) ConvertToAnaglyph(colType colorType) (image.Image, error) {
-	if len(m.Images) != 2 {
+func (m *MPO) ConvertToAnaglyph(colType colorType) (image.Image, error) {
+	if len(m.Image) != 2 {
 		return nil, errors.New("Anaglph conversion only supports 2 image MPOs")
 	}
 
-	left := m.Images[0]
-	right := m.Images[1]
+	left := m.Image[0]
+	right := m.Image[1]
 
 	if !left.Bounds().Eq(right.Bounds()) {
 		return nil, errors.New("MPO images must be the same size to convert to anaglyph")

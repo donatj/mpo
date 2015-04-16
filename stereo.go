@@ -5,10 +5,10 @@ import (
 	"image/draw"
 )
 
-func (m *Mpo) ConvertToStereo() image.Image {
+func (m *MPO) ConvertToStereo() image.Image {
 	mx := 0
 	my := 0
-	for _, i := range m.Images {
+	for _, i := range m.Image {
 		mx += i.Bounds().Max.X
 		if i.Bounds().Max.Y > my {
 			my = i.Bounds().Max.Y
@@ -18,7 +18,7 @@ func (m *Mpo) ConvertToStereo() image.Image {
 	img := image.NewRGBA(image.Rect(0, 0, mx, my))
 
 	dx := 0
-	for _, i := range m.Images {
+	for _, i := range m.Image {
 		b := i.Bounds()
 		b = b.Add(image.Point{dx, 0})
 
