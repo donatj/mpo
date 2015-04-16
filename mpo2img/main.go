@@ -27,7 +27,12 @@ func init() {
 }
 
 func main() {
-	m, err := mpo.DecodeAll(flag.Arg(0))
+	r, err := os.Open(flag.Arg(0))
+	if err != nil {
+		log.Fatalf("err on %v %s", err, flag.Arg(0))
+	}
+
+	m, err := mpo.DecodeAll(r)
 	if err != nil {
 		log.Fatalf("err on %v %s", err, flag.Arg(0))
 	}
