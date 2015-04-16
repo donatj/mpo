@@ -6,7 +6,7 @@ import (
 	"io"
 )
 
-// GIF represents the likely multiple images stored in a GIF file.
+// MPO represents the likely multiple images stored in a MPO file.
 type MPO struct {
 	Image []image.Image
 }
