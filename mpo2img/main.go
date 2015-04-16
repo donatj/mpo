@@ -6,14 +6,9 @@ import (
 	"github.com/donatj/mpo"
 	"image"
 	"image/jpeg"
-	"image/png"
 	"log"
 	"os"
 )
-
-func init() {
-	image.RegisterFormat("png", "png", png.Decode, png.DecodeConfig)
-}
 
 var (
 	format = flag.String("format", "stereo", "Output format [stereo|red-cyan|cyan-red|red-green|green-red]")
