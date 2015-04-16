@@ -4,7 +4,6 @@ import (
 	"image"
 	"image/jpeg"
 	"io"
-	"os"
 )
 
 // GIF represents the likely multiple images stored in a GIF file.
@@ -18,13 +17,13 @@ const (
 	mpojpgEOI = 0xD9
 )
 
-func DecodeAll(filename string) (*MPO, error) {
-	r, err := os.Open(filename)
+type MpoReader interface {
+	io.Reader
+	io.ReaderAt
+}
 
-	if err != nil {
-		return nil, err
-	}
-
+// DecodeAll reads an MPO image from r and returns the sequential frames
+func DecodeAll(r MpoReader) (*MPO, error) {
 	sectReaders := make([]*io.SectionReader, 0)
 	readData := make([]byte, 1)
 
