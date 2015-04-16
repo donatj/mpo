@@ -16,7 +16,8 @@ const (
 	GreenRed
 )
 
-func (m *MPO) ConvertToAnaglyph(colType colorType) (image.Image, error) {
+// Converts an MPO to the anaglyph format specified by ct colorType constant
+func (m *MPO) ConvertToAnaglyph(ct colorType) (image.Image, error) {
 	if len(m.Image) != 2 {
 		return nil, errors.New("Anaglph conversion only supports 2 image MPOs")
 	}
@@ -44,7 +45,7 @@ func (m *MPO) ConvertToAnaglyph(colType colorType) (image.Image, error) {
 				(((float32(rb) / 65535) * .144) * 65535)
 
 			var c color.RGBA64
-			switch colType {
+			switch ct {
 			case RedCyan:
 				c = color.RGBA64{
 					R: uint16(lgs),
