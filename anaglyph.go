@@ -47,16 +47,16 @@ func (m *Mpo) ConvertToAnaglyph(colType colorType) (image.Image, error) {
 			switch colType {
 			case REDBLUE:
 				c = color.RGBA64{
-					R: uint16(rgs),
-					G: uint16(lg),
-					B: uint16(lb),
+					R: uint16(lgs),
+					G: uint16(rg),
+					B: uint16(rb),
 					A: 65535,
 				}
 			case BLUERED:
 				c = color.RGBA64{
-					R: uint16(lgs),
-					G: uint16(rg),
-					B: uint16(rb),
+					R: uint16(rgs),
+					G: uint16(lg),
+					B: uint16(lb),
 					A: 65535,
 				}
 			default:
