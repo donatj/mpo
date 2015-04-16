@@ -59,6 +59,20 @@ func (m *Mpo) ConvertToAnaglyph(colType colorType) (image.Image, error) {
 					B: uint16(lb),
 					A: 65535,
 				}
+			case RedGreen:
+				c = color.RGBA64{
+					R: uint16(lgs),
+					G: uint16(rgs),
+					B: 65535 / 2,
+					A: 65535,
+				}
+			case GreenRed:
+				c = color.RGBA64{
+					R: uint16(rgs),
+					G: uint16(lgs),
+					B: 65535 / 2,
+					A: 65535,
+				}
 			default:
 				return nil, errors.New("Unsupported color type")
 			}
