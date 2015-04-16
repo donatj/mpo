@@ -9,11 +9,11 @@ import (
 type colorType int
 
 const (
-	REDBLUE colorType = iota
-	BLUERED
+	RedCyan colorType = iota
+	CyanRed
 
-	REDGREEN
-	GREENRED
+	RedGreen
+	GreenRed
 )
 
 func (m *Mpo) ConvertToAnaglyph(colType colorType) (image.Image, error) {
@@ -45,14 +45,14 @@ func (m *Mpo) ConvertToAnaglyph(colType colorType) (image.Image, error) {
 
 			var c color.RGBA64
 			switch colType {
-			case REDBLUE:
+			case RedCyan:
 				c = color.RGBA64{
 					R: uint16(lgs),
 					G: uint16(rg),
 					B: uint16(rb),
 					A: 65535,
 				}
-			case BLUERED:
+			case CyanRed:
 				c = color.RGBA64{
 					R: uint16(rgs),
 					G: uint16(lg),
