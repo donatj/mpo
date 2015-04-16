@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/donatj/mpo"
 	"image"
+	"image/jpeg"
 	"image/png"
 	"log"
 	"os"
@@ -16,7 +17,7 @@ func init() {
 
 var (
 	format = flag.String("format", "stereo", "Output format [stereo|red-cyan|cyan-red|red-green|green-red]")
-	output = flag.String("outfile", "output.png", "Output filename")
+	output = flag.String("outfile", "output.jpg", "Output filename")
 	help   = flag.Bool("help", false, "Displays this text")
 )
 
@@ -31,7 +32,7 @@ func init() {
 }
 
 func main() {
-	m, err := mpo.Decode(flag.Arg(0))
+	m, err := mpo.DecodeAll(flag.Arg(0))
 	if err != nil {
 		log.Fatalf("err on %v %s", err, flag.Arg(0))
 	}
@@ -69,7 +70,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err = png.Encode(f, img); err != nil {
+	if err = jpeg.Encode(f, img, nil); err != nil {
 		log.Fatal(err)
 	}
 }
