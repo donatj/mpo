@@ -11,10 +11,6 @@ type Mpo struct {
 	Images []image.Image
 }
 
-func init() {
-	image.RegisterFormat("jpeg", "jpeg", jpeg.Decode, jpeg.DecodeConfig)
-}
-
 const (
 	mpojpgMKR = 0xFF
 	mpojpgSOI = 0xD8
@@ -73,7 +69,7 @@ func Decode(filename string) (*Mpo, error) {
 	}
 
 	for _, s := range sectReaders {
-		img, _, err := image.Decode(s)
+		img, err := jpeg.Decode(s)
 		if err != nil {
 			return nil, err
 		}
