@@ -16,7 +16,7 @@ const (
 	GreenRed
 )
 
-// Converts an MPO to the anaglyph format specified by ct colorType constant
+// ConvertToAnaglyph converts an MPO to the anaglyph format specified by ct colorType constant
 func (m *MPO) ConvertToAnaglyph(ct colorType) (image.Image, error) {
 	if len(m.Image) != 2 {
 		return nil, errors.New("anaglph conversion only supports 2 image")

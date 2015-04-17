@@ -5,7 +5,7 @@ import (
 	"image/draw"
 )
 
-// Converts an MPO to StereoScopic image
+// ConvertToStereo converts an MPO to a StereoScopic image
 func (m *MPO) ConvertToStereo() image.Image {
 	mx := 0
 	my := 0
