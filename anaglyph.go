@@ -9,11 +9,11 @@ import (
 type colorType int
 
 const (
-	RedCyan colorType = iota
-	CyanRed
+	RedCyan colorType = iota // Red on left eye, cyan on right
+	CyanRed                  // Cyan on left eye, red on right
 
-	RedGreen
-	GreenRed
+	RedGreen // Red on left eye, green on right
+	GreenRed // Green on left eye, red on right
 )
 
 // ConvertToAnaglyph converts an MPO to the anaglyph format specified by ct colorType constant
@@ -75,7 +75,7 @@ func (m *MPO) ConvertToAnaglyph(ct colorType) (image.Image, error) {
 					A: 65535,
 				}
 			default:
-				return nil, errors.New("Unsupported color type")
+				return nil, errors.New("unsupported color type")
 			}
 
 			img.Set(x, y, c)
