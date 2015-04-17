@@ -19,14 +19,14 @@ const (
 // Converts an MPO to the anaglyph format specified by ct colorType constant
 func (m *MPO) ConvertToAnaglyph(ct colorType) (image.Image, error) {
 	if len(m.Image) != 2 {
-		return nil, errors.New("Anaglph conversion only supports 2 image MPOs")
+		return nil, errors.New("anaglph conversion only supports 2 image")
 	}
 
 	left := m.Image[0]
 	right := m.Image[1]
 
 	if !left.Bounds().Eq(right.Bounds()) {
-		return nil, errors.New("MPO images must be the same size to convert to anaglyph")
+		return nil, errors.New("anaglyph images must be the same size")
 	}
 
 	img := image.NewRGBA(left.Bounds())
