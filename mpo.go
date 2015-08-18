@@ -2,11 +2,14 @@ package mpo
 
 import (
 	"bytes"
+	"errors"
 	"image"
 	"image/jpeg"
 	"io"
 	"io/ioutil"
 )
+
+var ErrNoImages = errors.New("no images found in mpo image")
 
 // MPO represents the likely multiple images stored in a MPO file.
 type MPO struct {
@@ -82,4 +85,39 @@ func DecodeAll(rr io.Reader) (*MPO, error) {
 	}
 
 	return m, nil
+}
+
+func Decode(r io.Reader) (image.Image, error) {
+	all, err := DecodeAll(r)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(all.Image) < 1 {
+		return nil, ErrNoImages
+	}
+
+	return all.Image[0], nil
+}
+
+func DecodeConfig(r io.Reader) (image.Config, error) {
+	all, err := DecodeAll(r)
+	if err != nil {
+		return image.Config{}, err
+	}
+
+	if len(all.Image) < 1 {
+		return image.Config{}, ErrNoImages
+	}
+
+	return image.Config{
+		ColorModel: all.Image[0].ColorModel(),
+		Width:      all.Image[0].Bounds().Max.X,
+		Height:     all.Image[0].Bounds().Max.Y,
+	}, nil
+}
+
+func init() {
+	// \xff\xd8\xff clashes with jpeg but hopefully shouldn't cause issues
+	image.RegisterFormat("mpo", "\xff\xd8\xff", Decode, DecodeConfig)
 }
