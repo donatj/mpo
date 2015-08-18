@@ -7,5 +7,5 @@ Simple Go-lang JPEG MPO (Multi Picture Object) Decoder
 ## WIP
 
 Todo:
-- Refactor to work with `image.RegisterFormat`
+- Optimization
 - Add more control over stereo/anaglyph
