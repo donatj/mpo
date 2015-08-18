@@ -1,3 +1,10 @@
+// Copyright 2015 Jesse G Donat.
+// Use of this source code is governed by a MIT-style
+// license that can be found in the LICENSE.md file.
+
+// Package mpo implements an MPO image decoder.
+//
+// MPO is defined in CIPA DC-007: http://www.cipa.jp/std/documents/e/DC-007_E.pdf.
 package mpo
 
 import (
@@ -9,6 +16,7 @@ import (
 	"io/ioutil"
 )
 
+// A ErrNoImages reports that no images were found in the MPO file.
 var ErrNoImages = errors.New("no images found in mpo image")
 
 // MPO represents the likely multiple images stored in a MPO file.
@@ -18,8 +26,8 @@ type MPO struct {
 
 const (
 	mpojpgMKR = 0xFF
-	mpojpgSOI = 0xD8
-	mpojpgEOI = 0xD9
+	mpojpgSOI = 0xD8 // Start of Image
+	mpojpgEOI = 0xD9 // End of Image
 )
 
 // DecodeAll reads an MPO image from r and returns the sequential frames
@@ -87,6 +95,7 @@ func DecodeAll(rr io.Reader) (*MPO, error) {
 	return m, nil
 }
 
+// Decode reads a MPO image from r and returns it as an image.Image.
 func Decode(r io.Reader) (image.Image, error) {
 	all, err := DecodeAll(r)
 	if err != nil {
@@ -100,6 +109,10 @@ func Decode(r io.Reader) (image.Image, error) {
 	return all.Image[0], nil
 }
 
+// DecodeConfig returns the color model and dimensions of an MPO image without
+// decoding the entire image.
+//
+// TODO Optimize this - possibly just faling back to jpeg.DecodeConfig
 func DecodeConfig(r io.Reader) (image.Config, error) {
 	all, err := DecodeAll(r)
 	if err != nil {
