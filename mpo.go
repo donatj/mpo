@@ -1,9 +1,11 @@
 package mpo
 
 import (
+	"bytes"
 	"image"
 	"image/jpeg"
 	"io"
+	"io/ioutil"
 )
 
 // MPO represents the likely multiple images stored in a MPO file.
@@ -17,13 +19,15 @@ const (
 	mpojpgEOI = 0xD9
 )
 
-type MpoReader interface {
-	io.Reader
-	io.ReaderAt
-}
-
 // DecodeAll reads an MPO image from r and returns the sequential frames
-func DecodeAll(r MpoReader) (*MPO, error) {
+func DecodeAll(rr io.Reader) (*MPO, error) {
+	data, err := ioutil.ReadAll(rr)
+	if err != nil {
+		return nil, err
+	}
+
+	r := bytes.NewReader(data)
+
 	sectReaders := make([]*io.SectionReader, 0)
 	readData := make([]byte, 1)
 
