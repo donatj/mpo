@@ -1,8 +1,15 @@
-# MPO Decoder
+# MPO Decoder Library
 
 [![GoDoc](https://godoc.org/github.com/donatj/mpo?status.svg)](https://godoc.org/github.com/donatj/mpo)
 
 Simple Go JPEG MPO (Multi Picture Object) Decoder
+
+## Install Sample Command Line Tool
+
+```bash
+go get github.com/donatj/mpo
+go install github.com/donatj/mpo/mpo2img
+```
 
 ## WIP
 
