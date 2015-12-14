@@ -9,24 +9,38 @@ import (
 type colorType int
 
 const (
-	RedCyan colorType = iota // Red on left eye, cyan on right
-	CyanRed                  // Cyan on left eye, red on right
+	// RedCyan is Red on left eye, cyan on right
+	RedCyan colorType = iota
 
-	RedGreen // Red on left eye, green on right
-	GreenRed // Green on left eye, red on right
+	// CyanRed is Cyan on left eye, red on right
+	CyanRed
+
+	// RedGreen is Red on left eye, green on right
+	RedGreen
+
+	// GreenRed is Green on left eye, red on right
+	GreenRed
 )
+
+// ErrInvalidImageCount indicates that incorrect number of images were found
+// durring the anaglyph conversion proccess.
+var ErrInvalidImageCount = errors.New("anaglph conversion only supports 2 image")
+
+// ErrInconsistentBounds indicates that not all images within the MPO file were
+// found to be the same size, which is a requirement for the anaglyph conversion.
+var ErrInconsistentBounds = errors.New("anaglyph images must be the same size")
 
 // ConvertToAnaglyph converts an MPO to the anaglyph format specified by ct colorType constant
 func (m *MPO) ConvertToAnaglyph(ct colorType) (image.Image, error) {
 	if len(m.Image) != 2 {
-		return nil, errors.New("anaglph conversion only supports 2 image")
+		return nil, ErrInvalidImageCount
 	}
 
 	left := m.Image[0]
 	right := m.Image[1]
 
 	if !left.Bounds().Eq(right.Bounds()) {
-		return nil, errors.New("anaglyph images must be the same size")
+		return nil, ErrInconsistentBounds
 	}
 
 	img := image.NewRGBA(left.Bounds())

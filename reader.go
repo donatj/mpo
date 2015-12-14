@@ -16,7 +16,7 @@ import (
 	"io/ioutil"
 )
 
-// A ErrNoImages reports that no images were found in the MPO file.
+// ErrNoImages indicates that no images were found in the specified file.
 var ErrNoImages = errors.New("no images found in mpo image")
 
 // MPO represents the likely multiple images stored in a MPO file.
@@ -42,9 +42,12 @@ func DecodeAll(rr io.Reader) (*MPO, error) {
 	sectReaders := make([]*io.SectionReader, 0)
 	readData := make([]byte, 1)
 
-	var depth uint8 = 0
-	var imgStart int64 = 0
-	var loc int64 = 0
+	var (
+		depth    uint8
+		imgStart int64
+		loc      int64
+	)
+
 	for {
 		i1, err := r.Read(readData)
 		if err == io.EOF {
