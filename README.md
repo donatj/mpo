@@ -1,5 +1,6 @@
 # MPO Decoder Library
 
+[![Go Report Card](http://goreportcard.com/badge/donatj/mpo)](http://goreportcard.com/report/donatj/mpo)
 [![GoDoc](https://godoc.org/github.com/donatj/mpo?status.svg)](https://godoc.org/github.com/donatj/mpo)
 
 Simple Go JPEG MPO (Multi Picture Object) Decoder
