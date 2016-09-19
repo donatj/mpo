@@ -3,11 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/donatj/mpo"
 	"image"
 	"image/jpeg"
 	"log"
 	"os"
+
+	"github.com/donatj/mpo"
 )
 
 var (
@@ -17,12 +18,16 @@ var (
 )
 
 func init() {
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "Usage of %s:\n <mpofile>", os.Args[0])
+		flag.PrintDefaults()
+	}
+
 	flag.Parse()
 
 	if flag.NArg() != 1 {
-		fmt.Println("usage: mpo2img <mpofile>")
-		flag.PrintDefaults()
-		os.Exit(1)
+		flag.Usage()
+		os.Exit(2)
 	}
 }
 
