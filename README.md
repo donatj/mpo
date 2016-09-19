@@ -5,11 +5,10 @@
 
 Simple Go JPEG MPO (Multi Picture Object) Decoder
 
-## Install Sample Command Line Tool
+## Install/Update Command Line Tool
 
 ```bash
-go get github.com/donatj/mpo
-go install github.com/donatj/mpo/mpo2img
+go get -u github.com/donatj/mpo/cmd/mpo2img
 ```
 
 Usage
