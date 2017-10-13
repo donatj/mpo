@@ -23,7 +23,7 @@ const (
 )
 
 // ErrInvalidImageCount indicates that incorrect number of images were found
-// durring the anaglyph conversion proccess.
+// during the anaglyph conversion process.
 var ErrInvalidImageCount = errors.New("anaglph conversion only supports 2 image")
 
 // ErrInconsistentBounds indicates that not all images within the MPO file were
