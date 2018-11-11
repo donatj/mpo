@@ -3,15 +3,21 @@
 [![Go Report Card](https://goreportcard.com/badge/donatj/mpo)](https://goreportcard.com/report/donatj/mpo)
 [![GoDoc](https://godoc.org/github.com/donatj/mpo?status.svg)](https://godoc.org/github.com/donatj/mpo)
 
-Simple Go JPEG MPO (Multi Picture Object) Decoder
+Simple Go JPEG MPO (Multi Picture Object) Decoder - Library and CLI Tool
 
-## Install/Update Command Line Tool
+## Install CLI Tool
+
+Binaries are availible for Darwin (macOS), Linux and Windows on the release page:
+
+https://github.com/donatj/mpo/releases
+
+### From Source
 
 ```bash
 go get -u github.com/donatj/mpo/cmd/mpo2img
 ```
 
-Usage
+## CLI Usage
 
 ```
 mpo2img
