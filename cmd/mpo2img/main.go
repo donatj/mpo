@@ -19,7 +19,7 @@ var (
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage of %s:\n <mpofile>", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage of %s <mpofile>:\n", os.Args[0])
 		flag.PrintDefaults()
 	}
 
