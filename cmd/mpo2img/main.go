@@ -25,7 +25,7 @@ func init() {
 
 	flag.Parse()
 
-	if flag.NArg() != 1 {
+	if flag.NArg() != 1 || *help {
 		flag.Usage()
 		os.Exit(2)
 	}
