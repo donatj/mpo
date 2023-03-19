@@ -20,7 +20,7 @@ https://github.com/donatj/mpo/releases
 ### From Source
 
 ```bash
-go get -u github.com/donatj/mpo/cmd/mpo2img
+go install github.com/donatj/mpo/cmd/mpo2img@latest
 ```
 
 ## CLI Usage
