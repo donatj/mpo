@@ -2,6 +2,7 @@
 
 [![Go Report Card](https://goreportcard.com/badge/donatj/mpo)](https://goreportcard.com/report/donatj/mpo)
 [![GoDoc](https://godoc.org/github.com/donatj/mpo?status.svg)](https://godoc.org/github.com/donatj/mpo)
+[![awesome-go](https://img.shielded.dev/s?title=listed%20on&text=awesome-go&color=blue)](https://github.com/avelino/awesome-go)
 
 Simple Go JPEG MPO (Multi Picture Object) Decoder - Library and CLI Tool
 
