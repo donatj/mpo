@@ -1,3 +1,5 @@
 module github.com/donatj/mpo
 
-go 1.14
+go 1.24
+
+toolchain go1.24.1
