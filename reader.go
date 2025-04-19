@@ -13,7 +13,6 @@ import (
 	"image"
 	"image/jpeg"
 	"io"
-	"io/ioutil"
 )
 
 // ErrNoImages indicates that no images were found in the specified file.
@@ -32,7 +31,7 @@ const (
 
 // DecodeAll reads an MPO image from r and returns the sequential frames
 func DecodeAll(rr io.Reader) (*MPO, error) {
-	data, err := ioutil.ReadAll(rr)
+	data, err := io.ReadAll(rr)
 	if err != nil {
 		return nil, err
 	}
