@@ -45,8 +45,8 @@ func (m *MPO) ConvertToAnaglyph(ct colorType) (image.Image, error) {
 
 	img := image.NewRGBA(left.Bounds())
 
-	for x := 0; x <= left.Bounds().Max.X; x++ {
-		for y := 0; y <= left.Bounds().Max.Y; y++ {
+	for x := 0; x < left.Bounds().Max.X; x++ {
+		for y := 0; y < left.Bounds().Max.Y; y++ {
 			lr, lg, lb, _ := left.At(x, y).RGBA()
 			rr, rg, rb, _ := right.At(x, y).RGBA()
 
