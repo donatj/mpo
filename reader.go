@@ -1,4 +1,4 @@
-// Copyright 2015 Jesse G. Donat.
+// Copyright 2015-2025 Jesse G. Donat.
 //
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE.md file.
