@@ -75,20 +75,25 @@ func EncodeAll(w io.Writer, m *MPO, o *jpeg.Options) error {
 	return nil
 }
 
+const (
+	tagMPFVersion  = 0xB000
+	tagNumImages   = 0xB001
+	tagMPImageList = 0xB002
+	typeUNDEFINED  = 7
+	typeLONG       = 4
+	tiffHeaderSize = 8
+)
+
+const (
+	flagRepresentative = 0x20000000
+	mpTypeBaseline     = 0x00030000 // Baseline MP primary image
+)
+
 // buildMPFSegment constructs a valid APP2/MPF segment.
 func buildMPFSegment(offsets, sizes []uint32) ([]byte, error) {
 	if len(offsets) != len(sizes) {
 		return nil, errors.New("offset and size counts differ")
 	}
-
-	const (
-		tagMPFVersion  = 0xB000
-		tagNumImages   = 0xB001
-		tagMPImageList = 0xB002
-		typeUNDEFINED  = 7
-		typeLONG       = 4
-		tiffHeaderSize = 8
-	)
 
 	numImg := uint32(len(offsets))
 	numTags := uint16(3)
@@ -130,10 +135,6 @@ func buildMPFSegment(offsets, sizes []uint32) ([]byte, error) {
 	binary.Write(b, binary.LittleEndian, uint32(0))
 
 	// ── MP Entry array ―――――――――――――――――――――――――――――――――――――――――――――――――――
-	const (
-		flagRepresentative = 0x20000000
-		mpTypeBaseline     = 0x00030000 // Baseline MP primary image
-	)
 	for i := range offsets {
 		attr := mpTypeBaseline
 		if i == 0 {
