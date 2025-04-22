@@ -10,6 +10,10 @@ import (
 
 // EncodeAll encodes all images in m into a Baseline‑MP MPO and writes it to w.
 func EncodeAll(w io.Writer, m *MPO, o *jpeg.Options) error {
+	if o == nil {
+		o = &jpeg.Options{Quality: 90}
+	}
+
 	// ── JPEG‑encode every image ────────────────────────────────────────────────
 	bufs := make([][]byte, len(m.Image))
 	sizes := make([]uint32, len(m.Image))
