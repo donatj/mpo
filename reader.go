@@ -61,12 +61,19 @@ const (
 
 // DecodeAll reads an MPO image from r and returns the sequential frames
 func DecodeAll(rr io.Reader) (*MPO, error) {
-	data, err := io.ReadAll(rr)
-	if err != nil {
-		return nil, err
+	var rAt io.ReaderAt
+	if ra, ok := rr.(io.ReaderAt); ok {
+		rAt = ra
+	} else {
+		// fallback: buffer entire data (for readers that lack ReaderAt)
+		buf, err := io.ReadAll(rr)
+		if err != nil {
+			return nil, err
+		}
+		rAt = bytes.NewReader(buf)
 	}
 
-	r := bytes.NewReader(data)
+	r := io.NewSectionReader(rAt, 0, 1<<63-1)
 
 	sectReaders := make([]*io.SectionReader, 0)
 	readData := make([]byte, 1)
