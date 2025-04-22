@@ -6,7 +6,7 @@
 
 Simple Go JPEG MPO (Multi Picture Object) Decoder - Library and CLI Tool
 
-The library and CLI tool contain the ability to convert MPO to Stereoscopic JPEG as well as various color combinations of Analglyph.
+The library and CLI tool contain the ability to convert MPO to Stereoscopic JPEG as well as various color combinations of Anaglyph.
 
 A Web UI for this library exists here:
 
@@ -14,7 +14,7 @@ https://donatstudios.com/MPO-to-JPEG-Stereo
 
 ## Install CLI Tool
 
-Binaries are availible for Darwin (macOS), Linux and Windows on the release page:
+Binaries are available for Darwin (macOS), Linux and Windows on the release page:
 
 https://github.com/donatj/mpo/releases
 
@@ -40,6 +40,7 @@ usage: mpo2img <mpofile>
 ## WIP
 
 Todo:
+
 - Optimization
 - Add Writer
 - Add more control over stereo/anaglyph
