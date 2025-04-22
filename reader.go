@@ -144,7 +144,7 @@ func Decode(r io.Reader) (image.Image, error) {
 // DecodeConfig returns the color model and dimensions of an MPO image without
 // decoding the entire image.
 //
-// TODO Optimize this - possibly just faling back to jpeg.DecodeConfig
+// TODO Optimize this - possibly just falling back to jpeg.DecodeConfig
 func DecodeConfig(r io.Reader) (image.Config, error) {
 	all, err := DecodeAll(r)
 	if err != nil {
