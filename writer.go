@@ -11,15 +11,15 @@ import (
 // EncodeAll encodes all images in m into a Baseline‑MP MPO and writes it to w.
 func EncodeAll(w io.Writer, m *MPO, o *jpeg.Options) error {
 	// ── JPEG‑encode every image ────────────────────────────────────────────────
-	var bufs [][]byte
-	var sizes []uint32
-	for _, img := range m.Image {
+	bufs := make([][]byte, len(m.Image))
+	sizes := make([]uint32, len(m.Image))
+	for i, img := range m.Image {
 		var b bytes.Buffer
 		if err := jpeg.Encode(&b, img, o); err != nil {
 			return err
 		}
-		bufs = append(bufs, b.Bytes())
-		sizes = append(sizes, uint32(b.Len()))
+		bufs[i] = b.Bytes()
+		sizes[i] = uint32(b.Len())
 	}
 	if len(bufs) == 0 {
 		return errors.New("no images to encode")
