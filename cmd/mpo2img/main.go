@@ -19,13 +19,19 @@ var (
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage: %s <mpofile>\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage: %s <mpofile>\n\n", os.Args[0])
 		flag.PrintDefaults()
 	}
 
 	flag.Parse()
 
-	if flag.NArg() != 1 || *help {
+	if *help {
+		flag.Usage()
+		os.Exit(0)
+	}
+
+	if flag.NArg() != 1 {
+		fmt.Fprintln(os.Stderr, "Error: Exactly one MPO file is required.")
 		flag.Usage()
 		os.Exit(2)
 	}
