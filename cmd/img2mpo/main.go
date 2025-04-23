@@ -13,6 +13,7 @@ import (
 	_ "image/png"
 
 	_ "golang.org/x/image/bmp"
+	_ "golang.org/x/image/tiff"
 	_ "golang.org/x/image/webp"
 )
 
@@ -24,18 +25,21 @@ var (
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage: %s <imagefile> [<imagefile> ...]\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage: %s <imagefile> [<imagefile> ...]\n\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Convert one or more images to a Multi-Picture Object (MPO) file.\n\n")
+		fmt.Fprintf(os.Stderr, "Supported image formats: JPEG, PNG, GIF, BMP, TIFF, WebP\n\n")
 		flag.PrintDefaults()
 	}
 
 	flag.Parse()
 
-	if flag.NArg() < 2 {
-		fmt.Fprintln(os.Stderr, "Error: At least two image files are required")
-		*help = true
+	if *help {
+		flag.Usage()
+		os.Exit(0)
 	}
 
-	if *help {
+	if flag.NArg() < 1 {
+		fmt.Fprintln(os.Stderr, "Error: At least one image file is required - ideally two.")
 		flag.Usage()
 		os.Exit(2)
 	}
@@ -77,5 +81,4 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error encoding MPO: %v\n", err)
 		os.Exit(1)
 	}
-
 }
