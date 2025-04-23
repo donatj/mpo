@@ -14,18 +14,19 @@ import (
 var (
 	format = flag.String("format", "stereo", "Output format [stereo|red-cyan|cyan-red|red-green|green-red]")
 	output = flag.String("outfile", "output.jpg", "Output filename")
-	help   = flag.Bool("help", false, "Displays this text")
 )
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage: %s <mpofile>\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage: %s <mpofile>\n\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Convert a Multi-Picture Object (MPO) file to an image.\n\n")
 		flag.PrintDefaults()
 	}
 
 	flag.Parse()
 
-	if flag.NArg() != 1 || *help {
+	if flag.NArg() != 1 {
+		fmt.Fprintln(os.Stderr, "Error: Exactly one MPO file is required.")
 		flag.Usage()
 		os.Exit(2)
 	}

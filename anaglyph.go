@@ -2,6 +2,7 @@ package mpo
 
 import (
 	"errors"
+	"fmt"
 	"image"
 	"image/color"
 )
@@ -24,13 +25,22 @@ const (
 
 // ErrInvalidImageCount indicates that incorrect number of images were found
 // during the anaglyph conversion process.
-var ErrInvalidImageCount = errors.New("anaglph conversion only supports 2 image")
+var ErrInvalidImageCount = errors.New("anaglyph conversion only supports 2 images")
 
 // ErrInconsistentBounds indicates that not all images within the MPO file were
 // found to be the same size, which is a requirement for the anaglyph conversion.
 var ErrInconsistentBounds = errors.New("anaglyph images must be the same size")
 
+// ErrUnsupportedColorType indicates that the color type requested is not
+// supported by the anaglyph conversion process.
+var ErrUnsupportedColorType = errors.New("unsupported color type")
+
 // ConvertToAnaglyph converts an MPO to the anaglyph format specified by ct colorType constant
+// and returns the resulting image.
+//
+// ErrInconsistentBounds is returned if the images within the MPO are not the same size.
+// ErrInvalidImageCount is returned if the number of images in the MPO is not exactly 2.
+// ErrUnsupportedColorType is returned if the color type requested is not supported.
 func (m *MPO) ConvertToAnaglyph(ct colorType) (image.Image, error) {
 	if len(m.Image) != 2 {
 		return nil, ErrInvalidImageCount
@@ -39,14 +49,16 @@ func (m *MPO) ConvertToAnaglyph(ct colorType) (image.Image, error) {
 	left := m.Image[0]
 	right := m.Image[1]
 
+	b := left.Bounds()
+
 	if !left.Bounds().Eq(right.Bounds()) {
 		return nil, ErrInconsistentBounds
 	}
 
-	img := image.NewRGBA(left.Bounds())
+	img := image.NewRGBA(b)
 
-	for x := 0; x < left.Bounds().Max.X; x++ {
-		for y := 0; y < left.Bounds().Max.Y; y++ {
+	for x := b.Min.X; x < b.Max.X; x++ {
+		for y := b.Min.Y; y < b.Max.Y; y++ {
 			lr, lg, lb, _ := left.At(x, y).RGBA()
 			rr, rg, rb, _ := right.At(x, y).RGBA()
 
@@ -89,7 +101,7 @@ func (m *MPO) ConvertToAnaglyph(ct colorType) (image.Image, error) {
 					A: 65535,
 				}
 			default:
-				return nil, errors.New("unsupported color type")
+				return nil, fmt.Errorf("unsupported color type %d: %w", ct, ErrUnsupportedColorType)
 			}
 
 			img.Set(x, y, c)

@@ -1,10 +1,40 @@
-// Copyright 2015 Jesse G Donat.
+// Copyright 2015-2025 Jesse G. Donat.
+//
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE.md file.
 
-// Package mpo implements an MPO image decoder.
+// Package mpo provides simple read and write support for
+// Multi‑Picture Object (MPO) files, a format that stores two or more JPEG
+// frames in a single byte stream, and is used in some 3D cameras.
 //
-// MPO is defined in CIPA DC-007: http://www.cipa.jp/std/documents/e/DC-007_E.pdf.
+// The package is designed to be simple and easy to use, with a focus on
+// extracting and writing the JPEG frames. It does not attempt to
+// implement the full specification of the MPO format, but rather provides
+// a basic set of functions to work with the most common use cases.
+//
+// The package offers:
+//
+//   - DecodeAll  – extract every JPEG frame present in an MPO.
+//   - EncodeAll  – write a Baseline‑MP MPO from a slice of image.Image.
+//   - ConvertToStereo   – merge the first two frames side‑by‑side.
+//   - ConvertToAnaglyph – create red/cyan or similar anaglyphs.
+//
+// EncodeAll produces only the subset required for a Baseline‑MP file: the
+// first frame is flagged as the representative image and is given MP type
+// 0x00030000. DecodeAll imposes no such restriction and simply returns every
+// JPEG it finds.
+//
+// Specification references:
+//
+//   - CIPA DC‑X007:2012 – Multi‑Picture Format (MPF)
+//     https://www.cipa.jp/std/documents/e/DC-007-2012_E.pdf
+//   - ISO/IEC 10918‑1 – JPEG Baseline coding and marker layout.
+//   - JFIF 1.02 – APP0/JFIF segment details.
+//
+// Offsets in the MP Image List are measured relative to the TIFF endian
+// marker inside the APP2/MPF segment, as required by DC‑X007 §5.2.3.3.
+// The code relies only on the Go standard library and is safe for pure‑Go
+// builds.
 package mpo
 
 import (
@@ -31,12 +61,19 @@ const (
 
 // DecodeAll reads an MPO image from r and returns the sequential frames
 func DecodeAll(rr io.Reader) (*MPO, error) {
-	data, err := io.ReadAll(rr)
-	if err != nil {
-		return nil, err
+	var rAt io.ReaderAt
+	if ra, ok := rr.(io.ReaderAt); ok {
+		rAt = ra
+	} else {
+		// fallback: buffer entire data (for readers that lack ReaderAt)
+		buf, err := io.ReadAll(rr)
+		if err != nil {
+			return nil, err
+		}
+		rAt = bytes.NewReader(buf)
 	}
 
-	r := bytes.NewReader(data)
+	r := io.NewSectionReader(rAt, 0, 1<<63-1)
 
 	sectReaders := make([]*io.SectionReader, 0)
 	readData := make([]byte, 1)
@@ -114,7 +151,7 @@ func Decode(r io.Reader) (image.Image, error) {
 // DecodeConfig returns the color model and dimensions of an MPO image without
 // decoding the entire image.
 //
-// TODO Optimize this - possibly just faling back to jpeg.DecodeConfig
+// TODO Optimize this - possibly just falling back to jpeg.DecodeConfig
 func DecodeConfig(r io.Reader) (image.Config, error) {
 	all, err := DecodeAll(r)
 	if err != nil {
