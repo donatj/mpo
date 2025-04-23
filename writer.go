@@ -30,7 +30,7 @@ func EncodeAll(w io.Writer, m *MPO, o *jpeg.Options) error {
 	}
 
 	first := bufs[0]
-	if !bytes.HasPrefix(first, []byte{0xFF, 0xD8}) { // SOI marker
+	if !bytes.HasPrefix(first, []byte{mpojpgMKR, mpojpgSOI}) { // SOI marker
 		return errors.New("first image missing SOI")
 	}
 
@@ -56,7 +56,7 @@ func EncodeAll(w io.Writer, m *MPO, o *jpeg.Options) error {
 	}
 
 	// ── write final MPO stream --------------------------------------------------
-	if _, err := w.Write(first[:2]); err != nil { // SOI
+	if _, err := w.Write([]byte{mpojpgMKR, mpojpgSOI}); err != nil { // SOI
 		return err
 	}
 	if jfifLen > 0 {
