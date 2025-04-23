@@ -20,7 +20,6 @@ import (
 var (
 	output  = flag.String("outfile", "output.mpo", "Output filename")
 	quality = flag.Int("quality", 90, "JPEG quality [0-100]")
-	help    = flag.Bool("help", false, "Displays this text")
 )
 
 func init() {
@@ -32,11 +31,6 @@ func init() {
 	}
 
 	flag.Parse()
-
-	if *help {
-		flag.Usage()
-		os.Exit(0)
-	}
 
 	if flag.NArg() < 1 {
 		fmt.Fprintln(os.Stderr, "Error: At least one image file is required - ideally two.")
