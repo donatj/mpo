@@ -20,6 +20,7 @@ var (
 func init() {
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s <mpofile>\n\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Convert a Multi-Picture Object (MPO) file to an image.\n\n")
 		flag.PrintDefaults()
 	}
 
