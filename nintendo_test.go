@@ -50,10 +50,10 @@ func TestNintendoMetadata_Present(t *testing.T) {
 	// APP2/NINT segment
 	buf.Write([]byte{0xFF, 0xE2}) // APP2 marker
 	nintData := []byte("Test Nintendo Data")
-	segLen := 2 + 4 + len(nintData) // length field + "NINT" + data
+	segLen := 2 + 4 + len(nintData)                    // length field + "NINT" + data
 	buf.Write([]byte{byte(segLen >> 8), byte(segLen)}) // segment length
-	buf.Write([]byte{'N', 'I', 'N', 'T'}) // NINT identifier
-	buf.Write(nintData) // Nintendo-specific data
+	buf.Write([]byte{'N', 'I', 'N', 'T'})              // NINT identifier
+	buf.Write(nintData)                                // Nintendo-specific data
 
 	// Add a minimal valid JPEG (1x1 red pixel)
 	// This is a simplified JPEG structure - enough to pass basic parsing
@@ -69,10 +69,10 @@ func TestNintendoMetadata_Present(t *testing.T) {
 	// SOF0 marker - start of frame
 	buf.Write([]byte{
 		0xFF, 0xC0, 0x00, 0x0B, // SOF0 marker, length
-		0x08, // bits per component
+		0x08,       // bits per component
 		0x00, 0x01, // height = 1
 		0x00, 0x01, // width = 1
-		0x01, // number of components
+		0x01,             // number of components
 		0x01, 0x11, 0x00, // component 1 spec
 	})
 
@@ -86,7 +86,7 @@ func TestNintendoMetadata_Present(t *testing.T) {
 	// SOS marker - start of scan
 	buf.Write([]byte{
 		0xFF, 0xDA, 0x00, 0x08, // SOS marker, length
-		0x01, // components in scan
+		0x01,       // components in scan
 		0x01, 0x00, // component selector and tables
 		0x00, 0x3F, 0x00, // spectral selection
 	})
@@ -104,7 +104,7 @@ func TestNintendoMetadata_Present(t *testing.T) {
 		// If JPEG decoding fails, that's okay for this test - we're testing metadata parsing
 		// Let's verify the error is JPEG-related and try a different approach
 		t.Logf("JPEG decode failed (expected for minimal JPEG): %v", err)
-		
+
 		// Test with a real encoded JPEG instead
 		testWithRealJPEG(t)
 		return

@@ -82,9 +82,9 @@ type MPO struct {
 }
 
 const (
-	mpojpgMKR = 0xFF
-	mpojpgSOI = 0xD8 // Start of Image
-	mpojpgEOI = 0xD9 // End of Image
+	mpojpgMKR  = 0xFF
+	mpojpgSOI  = 0xD8 // Start of Image
+	mpojpgEOI  = 0xD9 // End of Image
 	mpojpgAPP2 = 0xE2 // APP2 marker
 )
 
@@ -235,11 +235,11 @@ func parseNintendoMetadata(data []byte) *NintendoMetadata {
 				pos++
 				continue
 			}
-			
+
 			// Check if this is a NINT segment
-			if pos+8 <= len(data) && 
-			   data[pos+4] == 'N' && data[pos+5] == 'I' && 
-			   data[pos+6] == 'N' && data[pos+7] == 'T' {
+			if pos+8 <= len(data) &&
+				data[pos+4] == 'N' && data[pos+5] == 'I' &&
+				data[pos+6] == 'N' && data[pos+7] == 'T' {
 				// Found Nintendo metadata
 				// Extract the data after "NINT" identifier (4 bytes) up to segment length
 				dataStart := pos + 8
@@ -247,21 +247,21 @@ func parseNintendoMetadata(data []byte) *NintendoMetadata {
 				if dataEnd > len(data) {
 					dataEnd = len(data)
 				}
-				
+
 				raw := make([]byte, dataEnd-dataStart)
 				copy(raw, data[dataStart:dataEnd])
-				
+
 				return &NintendoMetadata{
 					Raw: raw,
 				}
 			}
-			
+
 			pos += 2 + segLen
 		} else {
 			pos++
 		}
 	}
-	
+
 	return nil
 }
 
