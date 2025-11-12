@@ -175,3 +175,42 @@ func testWithRealJPEG(t *testing.T) {
 		t.Errorf("expected 1 image, got %d", len(decoded.Image))
 	}
 }
+
+// TestHasNintendoMetadata tests the HasNintendoMetadata helper method
+func TestHasNintendoMetadata(t *testing.T) {
+	tests := []struct {
+		name     string
+		mpo      *mpo.MPO
+		expected bool
+	}{
+		{
+			name:     "nil Nintendo field",
+			mpo:      &mpo.MPO{Nintendo: nil},
+			expected: false,
+		},
+		{
+			name:     "empty Raw data",
+			mpo:      &mpo.MPO{Nintendo: &mpo.NintendoMetadata{Raw: []byte{}}},
+			expected: false,
+		},
+		{
+			name:     "nil Raw data",
+			mpo:      &mpo.MPO{Nintendo: &mpo.NintendoMetadata{Raw: nil}},
+			expected: false,
+		},
+		{
+			name:     "valid Nintendo data",
+			mpo:      &mpo.MPO{Nintendo: &mpo.NintendoMetadata{Raw: []byte("test")}},
+			expected: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.mpo.HasNintendoMetadata()
+			if got != tt.expected {
+				t.Errorf("HasNintendoMetadata() = %v, want %v", got, tt.expected)
+			}
+		})
+	}
+}

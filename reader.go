@@ -24,12 +24,20 @@
 // 0x00030000. DecodeAll imposes no such restriction and simply returns every
 // JPEG it finds.
 //
+// # Nintendo 3DS Support
+//
+// DecodeAll optionally parses Nintendo 3DS-specific metadata from APP2/NINT
+// segments when present. This metadata is stored in the MPO.Nintendo field
+// and can be accessed using the HasNintendoMetadata() method. The raw bytes
+// are preserved for custom parsing of Nintendo-specific stereoscopic parameters.
+//
 // Specification references:
 //
 //   - CIPA DC‑X007:2012 – Multi‑Picture Format (MPF)
 //     https://www.cipa.jp/std/documents/e/DC-007-2012_E.pdf
 //   - ISO/IEC 10918‑1 – JPEG Baseline coding and marker layout.
 //   - JFIF 1.02 – APP0/JFIF segment details.
+//   - Nintendo 3DS MPO Format – https://3dbrew.org/wiki/MPO
 //
 // Offsets in the MP Image List are measured relative to the TIFF endian
 // marker inside the APP2/MPF segment, as required by DC‑X007 §5.2.3.3.
@@ -50,9 +58,20 @@ var ErrNoImages = errors.New("no images found in mpo image")
 
 // NintendoMetadata contains Nintendo 3DS-specific metadata from APP2/NINT segments.
 // This is optional metadata that may be present in MPO files created by Nintendo 3DS cameras.
+//
+// Nintendo 3DS cameras embed proprietary stereoscopic metadata in APP2 segments with
+// the "NINT" identifier. This metadata can include parallax settings, camera calibration
+// data, and 3D effect parameters.
+//
+// Reference: https://3dbrew.org/wiki/MPO
 type NintendoMetadata struct {
 	// Raw contains the raw bytes of the NINT segment data (after the "NINT" identifier)
 	Raw []byte
+}
+
+// HasNintendoMetadata returns true if the MPO contains Nintendo 3DS-specific metadata.
+func (m *MPO) HasNintendoMetadata() bool {
+	return m.Nintendo != nil && len(m.Nintendo.Raw) > 0
 }
 
 // MPO represents the likely multiple images stored in a MPO file.
