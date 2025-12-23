@@ -12,6 +12,7 @@ The library and CLI can:
 - **Encode** multiple JPEG frames into a Baseline-MP MPO.
 - **Convert** an MPO to a stereoscopic (side-by-side) JPEG.
 - **Create** anaglyph images (red–cyan, cyan–red, red–green, green–red).
+- **Parse** Nintendo 3DS-specific metadata (optional).
 
 A Web UI for converting MPO to JPEG is available at:
 
@@ -69,6 +70,30 @@ Supported image formats: JPEG, PNG, GIF, BMP, TIFF, WebP
   -quality int
         JPEG quality [0-100] (default 90)
 ```
+
+## Library Features
+
+### Nintendo 3DS Support
+
+The library can optionally parse and preserve Nintendo 3DS-specific metadata found in MPO files created by Nintendo 3DS cameras. This metadata is stored in APP2 segments with the "NINT" identifier and may contain stereoscopic parameters, camera calibration data, and 3D effect settings.
+
+When using the library:
+
+```go
+mpo, err := mpo.DecodeAll(reader)
+if err != nil {
+    // handle error
+}
+
+// Check if Nintendo metadata is present
+if mpo.HasNintendoMetadata() {
+    // Access raw Nintendo metadata bytes
+    nintendoData := mpo.Nintendo.Raw
+    // Process Nintendo-specific data as needed
+}
+```
+
+For more information about the Nintendo 3DS MPO format, see: https://3dbrew.org/wiki/MPO
 
 ## WIP
 
