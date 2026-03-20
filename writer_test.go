@@ -23,8 +23,8 @@ func TestEncodeAll_RoundTrip(t *testing.T) {
 	// Create two distinct 10×10 images
 	img1 := image.NewRGBA(image.Rect(0, 0, 10, 10))
 	img2 := image.NewRGBA(image.Rect(0, 0, 10, 10))
-	for x := 0; x < 10; x++ {
-		for y := 0; y < 10; y++ {
+	for x := range 10 {
+		for y := range 10 {
 			img1.Set(x, y, color.RGBA{255, 0, 0, 255})
 			img2.Set(x, y, color.RGBA{0, 255, 0, 255})
 		}
