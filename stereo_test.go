@@ -39,3 +39,59 @@ func TestConvertToAnaglyph_UnsupportedCount(t *testing.T) {
 		t.Fatal("expected error for single-image anaglyph, got nil")
 	}
 }
+
+func TestConvertToAnaglyph_LuminanceCoefficients(t *testing.T) {
+	tests := []struct {
+		name  string
+		left  color.RGBA
+		coeff float32
+	}{
+		{
+			name:  "red channel weight",
+			left:  color.RGBA{255, 0, 0, 255},
+			coeff: .299,
+		},
+		{
+			name:  "blue channel weight",
+			left:  color.RGBA{0, 0, 255, 255},
+			coeff: .114,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			left := image.NewRGBA(image.Rect(0, 0, 1, 1))
+			left.Set(0, 0, tc.left)
+
+			right := image.NewRGBA(image.Rect(0, 0, 1, 1))
+			right.Set(0, 0, color.RGBA{0, 0, 0, 255})
+
+			m := &mpo.MPO{Image: []image.Image{left, right}}
+			anaglyph, err := m.ConvertToAnaglyph(mpo.RedCyan)
+			if err != nil {
+				t.Fatalf("ConvertToAnaglyph failed: %v", err)
+			}
+
+			// Convert the 16-bit luminance value through RGBA's 8-bit storage path.
+			rawLuminance := uint16(float32(65535) * tc.coeff)
+			expectedR8 := uint16(uint8(rawLuminance >> 8))
+			expectedR := expectedR8<<8 | expectedR8
+
+			got := color.RGBA64Model.Convert(anaglyph.At(0, 0)).(color.RGBA64)
+			if got.R != expectedR {
+				t.Fatalf("left luminance red channel = %d, want %d", got.R, expectedR)
+			}
+
+			// Also validate the right-eye luminance path (rgs) via CyanRed.
+			m = &mpo.MPO{Image: []image.Image{right, left}}
+			anaglyph, err = m.ConvertToAnaglyph(mpo.CyanRed)
+			if err != nil {
+				t.Fatalf("ConvertToAnaglyph (CyanRed) failed: %v", err)
+			}
+			got = color.RGBA64Model.Convert(anaglyph.At(0, 0)).(color.RGBA64)
+			if got.R != expectedR {
+				t.Fatalf("right luminance red channel = %d, want %d", got.R, expectedR)
+			}
+		})
+	}
+}

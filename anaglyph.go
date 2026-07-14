@@ -62,13 +62,9 @@ func (m *MPO) ConvertToAnaglyph(ct colorType) (image.Image, error) {
 			lr, lg, lb, _ := left.At(x, y).RGBA()
 			rr, rg, rb, _ := right.At(x, y).RGBA()
 
-			lgs := (((float32(lr) / 65535) * .229) * 65535) +
-				(((float32(lg) / 65535) * .587) * 65535) +
-				(((float32(lb) / 65535) * .144) * 65535)
+			lgs := float32(lr)*.299 + float32(lg)*.587 + float32(lb)*.114
 
-			rgs := (((float32(rr) / 65535) * .229) * 65535) +
-				(((float32(rg) / 65535) * .587) * 65535) +
-				(((float32(rb) / 65535) * .144) * 65535)
+			rgs := float32(rr)*.299 + float32(rg)*.587 + float32(rb)*.114
 
 			var c color.RGBA64
 			switch ct {
