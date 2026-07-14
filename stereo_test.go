@@ -39,3 +39,47 @@ func TestConvertToAnaglyph_UnsupportedCount(t *testing.T) {
 		t.Fatal("expected error for single-image anaglyph, got nil")
 	}
 }
+
+func TestConvertToAnaglyph_LuminanceCoefficients(t *testing.T) {
+	tests := []struct {
+		name  string
+		left  color.RGBA
+		coeff float32
+	}{
+		{
+			name:  "red channel weight",
+			left:  color.RGBA{255, 0, 0, 255},
+			coeff: .299,
+		},
+		{
+			name:  "blue channel weight",
+			left:  color.RGBA{0, 0, 255, 255},
+			coeff: .114,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			left := image.NewRGBA(image.Rect(0, 0, 1, 1))
+			left.Set(0, 0, tc.left)
+
+			right := image.NewRGBA(image.Rect(0, 0, 1, 1))
+			right.Set(0, 0, color.RGBA{0, 0, 0, 255})
+
+			m := &mpo.MPO{Image: []image.Image{left, right}}
+			anaglyph, err := m.ConvertToAnaglyph(mpo.RedCyan)
+			if err != nil {
+				t.Fatalf("ConvertToAnaglyph failed: %v", err)
+			}
+
+			raw := uint16(float32(65535) * tc.coeff)
+			wantR := uint16(uint8(raw >> 8))
+			wantR = uint16(wantR)<<8 | wantR
+
+			got := color.RGBA64Model.Convert(anaglyph.At(0, 0)).(color.RGBA64)
+			if got.R != wantR {
+				t.Fatalf("red channel = %d, want %d", got.R, wantR)
+			}
+		})
+	}
+}
