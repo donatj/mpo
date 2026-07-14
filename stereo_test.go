@@ -79,7 +79,18 @@ func TestConvertToAnaglyph_LuminanceCoefficients(t *testing.T) {
 
 			got := color.RGBA64Model.Convert(anaglyph.At(0, 0)).(color.RGBA64)
 			if got.R != expectedR {
-				t.Fatalf("red channel = %d, want %d", got.R, expectedR)
+				t.Fatalf("left luminance red channel = %d, want %d", got.R, expectedR)
+			}
+
+			// Also validate the right-eye luminance path (rgs) via CyanRed.
+			m = &mpo.MPO{Image: []image.Image{right, left}}
+			anaglyph, err = m.ConvertToAnaglyph(mpo.CyanRed)
+			if err != nil {
+				t.Fatalf("ConvertToAnaglyph (CyanRed) failed: %v", err)
+			}
+			got = color.RGBA64Model.Convert(anaglyph.At(0, 0)).(color.RGBA64)
+			if got.R != expectedR {
+				t.Fatalf("right luminance red channel = %d, want %d", got.R, expectedR)
 			}
 		})
 	}
