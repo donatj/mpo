@@ -72,13 +72,14 @@ func TestConvertToAnaglyph_LuminanceCoefficients(t *testing.T) {
 				t.Fatalf("ConvertToAnaglyph failed: %v", err)
 			}
 
-			raw := uint16(float32(65535) * tc.coeff)
-			wantR := uint16(uint8(raw >> 8))
-			wantR = uint16(wantR)<<8 | wantR
+			// Convert the 16-bit luminance value through RGBA's 8-bit storage path.
+			rawLuminance := uint16(float32(65535) * tc.coeff)
+			expectedR8 := uint16(uint8(rawLuminance >> 8))
+			expectedR := expectedR8<<8 | expectedR8
 
 			got := color.RGBA64Model.Convert(anaglyph.At(0, 0)).(color.RGBA64)
-			if got.R != wantR {
-				t.Fatalf("red channel = %d, want %d", got.R, wantR)
+			if got.R != expectedR {
+				t.Fatalf("red channel = %d, want %d", got.R, expectedR)
 			}
 		})
 	}
