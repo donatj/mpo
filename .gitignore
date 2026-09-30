@@ -2,3 +2,5 @@
 /dist/
 *.jpg
 *.mpo
+/mpo2img
+/img2mpo
